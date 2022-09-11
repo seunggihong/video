@@ -22,7 +22,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/convert-mp3", async (req, res) => {
-  const videoId = req.body.videoID;
+  const videoId = youtube_parser(req.body.videoID);
+
   if (videoId === undefined || videoId === "" || videoId === null) {
     return res.render("index", {
       success: false,
@@ -58,3 +59,11 @@ app.post("/convert-mp3", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+
+/**  youtube url parser */
+function youtube_parser(url) {
+  var regExp =
+    /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  var match = url.match(regExp);
+  return match && match[7].length == 11 ? match[7] : false;
+}
